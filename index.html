@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moving Sale • Muzammil Khan</title>
+    <meta name="description" content="Moving out sale listings. High quality furniture and electronics.">
+    
+    <!-- Tailwind CSS (No build step required) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        slate: { 850: '#151e2e', 900: '#0f172a', 950: '#020617' },
+                        accent: { DEFAULT: '#38bdf8', glow: '#0ea5e9' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { background-color: #020617; color: #f8fafc; }
+        /* Hide scrollbar for thumbnails */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Smooth transitions */
+        .modal-enter { opacity: 0; pointer-events: none; transform: scale(0.95); }
+        .modal-active { opacity: 1; pointer-events: auto; transform: scale(1); }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+</head>
+<body class="flex min-h-screen flex-col font-sans text-slate-100">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-40 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 p-4 md:flex-row md:gap-0">
+            <div class="text-center md:text-left">
+                <h1 class="bg-gradient-to-r from-blue-200 to-accent-glow bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
+                    Moving Out Sale
+                </h1>
+                <div class="mt-1 flex items-center justify-center gap-1 text-xs text-slate-400 md:justify-start">
+                    <i data-lucide="map-pin" class="h-3 w-3"></i>
+                    <span>Mata Krupa Residency, Door 20, Floor 4</span>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="https://wa.me/918139802492" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 rounded-full bg-emerald-500/10 px-5 py-2.5 text-sm font-semibold text-emerald-400 transition-all hover:bg-emerald-500 hover:text-white">
+                    <i data-lucide="message-circle" class="h-4 w-4"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="tel:+918139802492" class="group flex items-center gap-2 rounded-full bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent transition-all hover:bg-accent hover:text-white">
+                    <i data-lucide="phone" class="h-4 w-4"></i>
+                    <span>Call Now</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 px-3 py-6 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+            
+            <!-- Hero -->
+            <div class="mb-8 text-center sm:mb-10">
+                <h2 class="mb-2 text-2xl font-extrabold text-white sm:mb-3 sm:text-4xl">
+                    Moving Out Sale
+                </h2>
+                <p class="mx-auto max-w-2xl text-sm text-slate-400 sm:text-base">
+                    I'm moving out and selling few of my rarely used household items and gadgets. Browse below and contact me on WhatsApp to purchase. ty
+                </p>
+            </div>
+
+            <!-- Grid -->
+            <div id="product-grid" class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+                <!-- Javascript will inject cards here -->
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 border-t border-white/5 bg-slate-950 py-8 text-center text-slate-500">
+        <div class="flex flex-col items-center justify-center gap-2">
+            <p class="text-sm">
+                &copy; <span id="year"></span> Muzammil Khan. All rights reserved.
+            </p>
+            <div class="flex items-center gap-1.5 text-xs">
+                <span>Developed by</span>
+                <a href="#" class="font-medium text-slate-300 hover:text-accent transition-colors">
+                    Muzammil Khan
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="gallery-modal" class="modal-enter fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 transition-all duration-300">
+        <button id="close-modal" class="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors">
+            <i data-lucide="x" class="h-6 w-6"></i>
+        </button>
+
+        <div class="relative flex h-full w-full max-w-5xl flex-col items-center justify-center gap-4">
+            <!-- Main Viewer -->
+            <div class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-slate-900/50 border border-white/5">
+                <img id="modal-img" src="" alt="Gallery" class="max-h-[70vh] w-auto max-w-full object-contain shadow-2xl transition-opacity duration-300" />
+                
+                <!-- Arrows -->
+                <button id="prev-btn" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-md hover:bg-accent hover:text-black transition-all">
+                    <i data-lucide="chevron-left" class="h-6 w-6"></i>
+                </button>
+                <button id="next-btn" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-md hover:bg-accent hover:text-black transition-all">
+                    <i data-lucide="chevron-right" class="h-6 w-6"></i>
+                </button>
+            </div>
+
+            <!-- Details & Thumbs -->
+            <div class="w-full space-y-4">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 id="modal-title" class="text-xl font-bold text-white"></h2>
+                        <p id="modal-desc" class="text-sm text-slate-400"></p>
+                    </div>
+                    <div class="text-right">
+                        <div id="modal-price" class="text-2xl font-bold text-accent-glow"></div>
+                        <span id="modal-sold-badge" class="hidden text-rose-500 font-bold text-sm">SOLD</span>
+                    </div>
+                </div>
+                <!-- Thumbnails -->
+                <div id="modal-thumbs" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==========================================
+        // CONFIGURATION & DATA
+        // ==========================================
+        
+        // YOUR SUPERPOWER: Change isSold to true to mark items as sold.
+        const PRODUCTS = [
+            {
+                id: "wakefit-mattress",
+                name: "Wakefit Orthopedic Mattress (Diwan)",
+                category: "Furniture",
+                currentPrice: 11000,
+                description: "72×48×6 inches. Includes waterproof protector. Excellent condition.",
+                images: ["m1.jpeg", "m2.jpeg", "m3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "ikea-chair",
+                name: "IKEA Flintan Chair",
+                category: "Furniture",
+                currentPrice: 1200,
+                description: "White, rotatable, height-adjustable. Ergonomic design.",
+                images: ["i1.jpeg", "i2.jpeg", "i3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "foldable-table",
+                name: "Multipurpose Foldable Table",
+                category: "Furniture",
+                currentPrice: 499,
+                description: "Simple, lightweight, sturdy. Great for WFH or dining.",
+                images: ["t1.jpeg", "t2.jpeg", "t3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "gas-stove",
+                name: "Lifelong 2-Burner Glass Stove",
+                category: "Kitchen",
+                currentPrice: 1000,
+                description: "Manual ignition. Toughened glass top. Works perfectly.",
+                images: ["s1.jpeg", "s2.jpeg", "s3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "bundle-misc",
+                name: "Home Essentials Bundle",
+                category: "Misc",
+                currentPrice: 499,
+                description: "Includes Shoe Rack + Laundry Bag + Stool. Take it all.",
+                images: ["b1.jpg", "b2.jpg", "b3.jpg"],
+                isSold: false
+            },
+            {
+                id: "yoga-mat",
+                name: "YOGARISE Premium Mat",
+                category: "Misc",
+                currentPrice: 250,
+                description: "Rarely used. Good grip and cushioning.",
+                images: ["y1.jpeg", "y2.jpeg", "y3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "helmet",
+                name: "Yamaha Stock Helmet",
+                category: "Misc",
+                currentPrice: 999,
+                description: "Standard safety helmet. Clean interior.",
+                images: ["h1.jpeg", "h2.jpeg", "h3.jpeg"],
+                isSold: false
+            },
+            {
+                id: "airtel-router",
+                name: "Airtel Xstream Wi-Fi Router",
+                category: "Electronics",
+                currentPrice: 999,
+                description: "High speed dual-band router.",
+                images: ["w1.jpg", "w2.jpg", "w3.jpg"],
+                isSold: false
+            },
+            {
+                id: "acer-monitor",
+                name: "Acer 22” Full HD IPS Monitor",
+                category: "Electronics",
+                currentPrice: 3999,
+                description: "Model EK220Q. 100Hz refresh rate, 1ms response. HDMI & VGA.",
+                images: ["mon1.jpg", "mon2.jpg", "mon3.jpg"],
+                isSold: false
+            },
+            {
+                id: "hp-notebook",
+                name: "HP Notebook 14”",
+                category: "Electronics",
+                currentPrice: 3999,
+                description: "Functional laptop for basic tasks.",
+                images: ["hp1.jpg", "hp2.jpg", "hp3.jpg"],
+                isSold: false
+            },
+            {
+                id: "laptop-used",
+                name: "14-inch Laptop (Spare)",
+                category: "Electronics",
+                currentPrice: 3999,
+                description: "Secondary device, good for parts or Linux server.",
+                images: ["lap1.jpg", "lap2.jpg", "lap3.jpg"],
+                isSold: false
+            }
+        ];
+
+        // ==========================================
+        // LOGIC
+        // ==========================================
+        
+        const grid = document.getElementById('product-grid');
+        const yearSpan = document.getElementById('year');
+        const modal = document.getElementById('gallery-modal');
+        
+        // Modal Elements
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalPrice = document.getElementById('modal-price');
+        const modalSoldBadge = document.getElementById('modal-sold-badge');
+        const modalThumbs = document.getElementById('modal-thumbs');
+        const btnClose = document.getElementById('close-modal');
+        const btnPrev = document.getElementById('prev-btn');
+        const btnNext = document.getElementById('next-btn');
+
+        let currentProduct = null;
+        let currentImageIndex = 0;
+
+        // Utilities
+        const formatPrice = (p) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(p);
+
+        // 1. Init
+        yearSpan.textContent = new Date().getFullYear();
+        renderGrid();
+        lucide.createIcons();
+
+        // 2. Render Grid
+        function renderGrid() {
+            grid.innerHTML = PRODUCTS.map((product, index) => {
+                const imgPath = `images/${product.images[0]}`;
+                const soldClass = product.isSold ? 'opacity-60 grayscale' : '';
+                const btnClass = product.isSold 
+                    ? 'cursor-not-allowed bg-slate-800 text-slate-500' 
+                    : 'bg-white text-slate-900 hover:bg-accent hover:text-white';
+                
+                return `
+                <div class="group relative flex flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-white/5 bg-slate-900 shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/10 ${soldClass}">
+                    
+                    <!-- Image -->
+                    <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-800 cursor-pointer" onclick="openGallery('${product.id}')">
+                        ${product.isSold ? '<div class="absolute left-0 top-3 sm:top-4 z-10 -rotate-12 bg-rose-600 px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white shadow-lg">Sold Out</div>' : ''}
+                        
+                        <img src="${imgPath}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                        
+                        <div class="absolute inset-0 hidden sm:flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                            <button class="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-md">
+                                <i data-lucide="image" class="h-4 w-4"></i> View Photos
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex flex-1 flex-col p-3 sm:p-5">
+                        <div class="mb-1 sm:mb-2 flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-1.5 py-0.5 text-[8px] sm:text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                                <i data-lucide="tag" class="h-2 w-2 sm:h-3 sm:w-3"></i> ${product.category}
+                            </span>
+                        </div>
+
+                        <h3 class="mb-1 text-sm font-bold leading-tight text-slate-100 sm:mb-2 sm:text-lg">${product.name}</h3>
+                        <p class="mb-2 line-clamp-2 text-xs text-slate-400 sm:mb-4 sm:text-sm">${product.description}</p>
+
+                        <div class="mt-auto flex items-end justify-between border-t border-white/5 pt-2 sm:pt-4">
+                            <span class="text-base font-bold text-accent-glow sm:text-xl">${formatPrice(product.currentPrice)}</span>
+                            <button onclick="openGallery('${product.id}')" ${product.isSold ? 'disabled' : ''} class="rounded-md sm:rounded-lg px-2 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold transition-colors ${btnClass}">
+                                ${product.isSold ? 'Sold' : 'Details'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            // Re-run icons for injected HTML
+            lucide.createIcons();
+        }
+
+        // 3. Gallery Logic
+        window.openGallery = (id) => {
+            currentProduct = PRODUCTS.find(p => p.id === id);
+            if (!currentProduct) return;
+            
+            currentImageIndex = 0;
+            updateModalContent();
+            
+            modal.classList.remove('modal-enter');
+            modal.classList.add('modal-active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        function closeGallery() {
+            modal.classList.remove('modal-active');
+            modal.classList.add('modal-enter');
+            document.body.style.overflow = 'auto';
+            currentProduct = null;
+        }
+
+        function updateModalContent() {
+            if (!currentProduct) return;
+            
+            modalImg.src = `images/${currentProduct.images[currentImageIndex]}`;
+            modalTitle.textContent = currentProduct.name;
+            modalDesc.textContent = currentProduct.description;
+            modalPrice.textContent = formatPrice(currentProduct.currentPrice);
+            
+            if (currentProduct.isSold) {
+                modalSoldBadge.classList.remove('hidden');
+            } else {
+                modalSoldBadge.classList.add('hidden');
+            }
+
+            // Thumbs
+            modalThumbs.innerHTML = currentProduct.images.map((img, idx) => `
+                <button onclick="setIndex(${idx})" class="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all ${idx === currentImageIndex ? 'border-accent opacity-100' : 'border-transparent opacity-50 hover:opacity-80'}">
+                    <img src="images/${img}" class="h-full w-full object-cover" />
+                </button>
+            `).join('');
+            
+            // Arrows visibility
+            if (currentProduct.images.length > 1) {
+                btnPrev.classList.remove('hidden');
+                btnNext.classList.remove('hidden');
+            } else {
+                btnPrev.classList.add('hidden');
+                btnNext.classList.add('hidden');
+            }
+        }
+
+        window.setIndex = (idx) => {
+            currentImageIndex = idx;
+            updateModalContent();
+        }
+
+        function nextImage() {
+            if (!currentProduct) return;
+            currentImageIndex = (currentImageIndex + 1) % currentProduct.images.length;
+            updateModalContent();
+        }
+
+        function prevImage() {
+            if (!currentProduct) return;
+            currentImageIndex = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
+            updateModalContent();
+        }
+
+        // Listeners
+        btnClose.addEventListener('click', closeGallery);
+        btnNext.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+        btnPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+        
+        // Key events
+        window.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('modal-active')) return;
+            if (e.key === 'Escape') closeGallery();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        // Click outside to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeGallery();
+        });
+
+    </script>
+</body>
+</html>
